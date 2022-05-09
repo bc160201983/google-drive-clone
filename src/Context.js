@@ -19,6 +19,7 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
   const [errorMsg, setErrorMsg] = useState();
   const [loading, setLoading] = useState(false);
+  const [isDemo, setIsDemo] = useState(false);
 
   function signup(email, password) {
     return createUserWithEmailAndPassword(auth, email, password);
@@ -48,6 +49,8 @@ export function AuthProvider({ children }) {
   }, []);
 
   const value = {
+    isDemo,
+    setIsDemo,
     updateNewEmail,
     updateNewPassword,
     login,

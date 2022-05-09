@@ -17,7 +17,7 @@ const FolderBreadCrum = ({ currentFolder }) => {
           linkAs={Link}
           linkProps={{
             to: {
-              pathname: folder.id ? `/folder/${folder.id}` : "/",
+              pathname: folder.id ? `/folder/${folder.id}` : "/dashboard",
               state: { folder: { ...folder, path: path.slice(1, index) } },
             },
           }}

@@ -1,3 +1,5 @@
+import { async } from "@firebase/util";
+import { getDefaultNormalizer } from "@testing-library/react";
 import React, { useRef, useState } from "react";
 import { Form, Button, Card, Alert } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
@@ -6,8 +8,16 @@ import Centered from "./Centered";
 const Login = () => {
   const emailRef = useRef();
   const passwordRef = useRef();
-  const { currentUser, login, setErrorMsg, setLoading, errorMsg, loading } =
-    useAuth();
+  const [isLoding, setIsLoading] = useState(false);
+  const {
+    currentUser,
+    login,
+    setErrorMsg,
+    setLoading,
+    errorMsg,
+    loading,
+    setIsDemo,
+  } = useAuth();
   const history = useNavigate();
 
   async function handleSubmit(e) {
@@ -35,6 +45,29 @@ const Login = () => {
     }
     setLoading(false);
   }
+
+  const demoLogin = async (e) => {
+    e.preventDefault();
+    try {
+      setErrorMsg("");
+      setIsLoading(true);
+      setIsDemo(true);
+      const res = await login("demo@gmail.com", "demo123");
+      const {
+        user: { uid, email },
+      } = res;
+      const user = {
+        id: uid,
+        email: email,
+      };
+      localStorage.setItem("gdrive-user", JSON.stringify(user));
+
+      history("/dashboard", { replace: true });
+    } catch (error) {
+      setErrorMsg(error.message);
+    }
+    setIsLoading(false);
+  };
   return (
     <Centered>
       <Card>
@@ -55,7 +88,7 @@ const Login = () => {
                 ...loading
               </Button>
             ) : (
-              <Button className="w-100" type="submit">
+              <Button className="w-100 mt-3" type="submit">
                 Log in
               </Button>
             )}
@@ -63,6 +96,15 @@ const Login = () => {
           <div className="w-100 text-center mt-3">
             <Link to="/forgot-password">Forgot Password?</Link>
           </div>
+          {isLoding ? (
+            <Button disabled={loading} className="w-100" type="submit">
+              ...loading
+            </Button>
+          ) : (
+            <Button className="w-100 mt-3" type="submit" onClick={demoLogin}>
+              Demo Login
+            </Button>
+          )}
         </Card.Body>
       </Card>
       <div className="w-100 text-center mt-2">

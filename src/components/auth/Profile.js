@@ -5,15 +5,16 @@ import { useAuth } from "../../Context";
 import Centered from "./Centered";
 const Profile = () => {
   const navigate = useNavigate();
-  const { currentUser, setErrorMsg, errorMsg, logout, loading } = useAuth();
+  const { currentUser, setErrorMsg, errorMsg, logout, loading, setIsDemo } =
+    useAuth();
 
   async function handleLogout() {
-    console.log("first");
     setErrorMsg("");
 
     try {
       await logout();
       localStorage.clear();
+      setIsDemo(false);
       navigate("/login");
     } catch (error) {
       setErrorMsg(error.massage);

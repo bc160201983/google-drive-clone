@@ -13,7 +13,7 @@ import Dashboard from "./components/drive/Dashboard";
 
 function App() {
   const navigate = useNavigate();
-  const { currentUser } = useAuth();
+  const { currentUser, isDemo } = useAuth();
 
   return (
     <>
@@ -21,6 +21,7 @@ function App() {
         <Route exact path="/" element={<PrivateRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/folder/:folderId" element={<Dashboard />} />
+
           <Route path="/profile" element={<Profile />} />
           <Route path="/update-profile" element={<UpdateProfile />} />
         </Route>

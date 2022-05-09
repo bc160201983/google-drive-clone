@@ -1,7 +1,23 @@
 import React from "react";
 import { Navbar, Nav, Container } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../Context";
 const NavbarComp = () => {
+  const { isDemo, setErrorMsg, logout, setIsDemo } = useAuth();
+  const navigate = useNavigate();
+
+  async function handleLogout() {
+    setErrorMsg("");
+
+    try {
+      await logout();
+      localStorage.clear();
+      setIsDemo(false);
+      navigate("/login");
+    } catch (error) {
+      setErrorMsg(error.massage);
+    }
+  }
   return (
     // <Navbar bg="light" expand="xxl">
     //   <Navbar.Brand as={Link} to="/">
@@ -19,9 +35,13 @@ const NavbarComp = () => {
           GDrive
         </Navbar.Brand>
         <Nav>
-          <Nav.Link as={Link} to="/profile">
-            Profile
-          </Nav.Link>
+          {isDemo ? (
+            <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+          ) : (
+            <Nav.Link as={Link} to="/profile">
+              Profile
+            </Nav.Link>
+          )}
         </Nav>
         {/* <Navbar.Collapse className="justify-content-end">
           <Navbar.Text>
